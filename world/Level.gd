@@ -6,10 +6,6 @@ export var max_height = 8
 var rooms : Array
 
 var _room_types : Array
-var _rooms_left_door : Array
-var _rooms_right_door : Array
-var _rooms_up_door : Array
-var _rooms_down_door : Array
 
 enum Sides {
 	HERE,
@@ -25,16 +21,15 @@ enum Sides {
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Populate the rooms list
-#	var dir = Directory.new()
-#	var rooms_path :="res://world/rooms/" 
-#	dir.open(rooms_path)
-#	dir.list_dir_begin(true, true)
-#	var file_name = dir.get_next()
-#	while file_name != "":
-#		var room_scene = load("poop") # TODO: i think this should be preload
-#		print(rooms_path+file_name)
-#		file_name = dir.get_next()
-
+	var dir = Directory.new()
+	var rooms_path :="res://world/rooms/" 
+	dir.open(rooms_path)
+	dir.list_dir_begin(true, true)
+	var file_name = dir.get_next()
+	while file_name != "":
+		var room_scene = load(rooms_path+file_name)
+		_room_types.push_back(room_scene)
+		file_name = dir.get_next()
 	
 	#seed("poopoopeepee".hash())
 	randomize()
@@ -94,6 +89,7 @@ func generate(num_rooms: int = 10):
 		print(line)
 	# END OF DEBUG
 	####################################
+	pass
 
 
 func how_many_adjacent(rooms_present_map: Array, room : Array):
