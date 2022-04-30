@@ -7,6 +7,11 @@ var rooms : Array
 
 var _room_types : Array
 
+# FOR ROOM PLACEMENT
+var _tile_size := 16
+var _room_width := 14
+var _room_height := 10
+
 enum Sides {
 	HERE,
 	LEFT,
@@ -22,7 +27,7 @@ enum Sides {
 func _ready():
 	# Populate the rooms list
 	var dir = Directory.new()
-	var rooms_path :="res://world/rooms/" 
+	var rooms_path := "res://world/rooms/" 
 	dir.open(rooms_path)
 	dir.list_dir_begin(true, true)
 	var file_name = dir.get_next()
@@ -70,13 +75,19 @@ func generate(num_rooms: int = 10):
 			(not rooms_present_map[new_room[0]][new_room[1]])):
 			# Check if rooms around is acceptable
 			rooms_present_map[new_room[0]][new_room[1]] = true
-			if back or how_many_adjacent(rooms_present_map, new_room)==1:
+			if back or how_many_adjacent(rooms_present_map, new_room, get_sides([Sides.HERE]))==1:
 				rooms_present.push_back([new_room[0],new_room[1]])
 			else:
 				rooms_present.push_front([new_room[0],new_room[1]])
 	
 	# Populate the rooms
-	
+	for i in range(rooms_present_map.size()):
+		for j in range(rooms_present_map[0].size()):
+			if(rooms_present_map[i][j]):
+				print("NEW ROOM")
+				var scene = _room_types[0].instance()
+				add_child(scene)
+				scene.global_translate(Vector2(_tile_size*_room_width*(-i+ceil(max_width)),_tile_size*_room_height*(-j+ceil(max_height))))
 	####################################
 	# DEBUG (print present room map)
 	for i in range(max_width):
@@ -92,8 +103,8 @@ func generate(num_rooms: int = 10):
 	pass
 
 
-func how_many_adjacent(rooms_present_map: Array, room : Array):
-	var sides = get_sides([Sides.HERE])
+func how_many_adjacent(rooms_present_map: Array, room : Array, sides := get_sides()):
+	#var sides = get_sides([Sides.HERE])
 	var num_present_sides = 0
 	for side in sides:
 		var next_room = [
