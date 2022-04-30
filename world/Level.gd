@@ -26,19 +26,18 @@ enum Sides {
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Populate the rooms list
+	_room_types.push_back(load("res://world/Room.tscn"))
 	var dir = Directory.new()
 	var rooms_path := "res://world/rooms/" 
 	dir.open(rooms_path)
 	dir.list_dir_begin(true, true)
 	var file_name = dir.get_next()
 	while file_name != "":
-		var room_scene = load(rooms_path+file_name)
-		_room_types.push_back(room_scene)
+		_room_types.push_back(load(rooms_path+file_name))
 		file_name = dir.get_next()
-	
 	#seed("poopoopeepee".hash())
 	randomize()
-	generate()
+	generate(18)
 
 
 # When called will repopulate _rooms
@@ -78,29 +77,20 @@ func generate(num_rooms: int = 10):
 			if back or how_many_adjacent(rooms_present_map, new_room, get_sides([Sides.HERE]))==1:
 				rooms_present.push_back([new_room[0],new_room[1]])
 			else:
-				rooms_present.push_front([new_room[0],new_room[1]])
+				rooms_present.push_front([new_room[0],new_room[1]]) #THIS
 	
 	# Populate the rooms
-	for i in range(rooms_present_map.size()):
-		for j in range(rooms_present_map[0].size()):
-			if(rooms_present_map[i][j]):
-				print("NEW ROOM")
-				var scene = _room_types[0].instance()
-				add_child(scene)
-				scene.global_translate(Vector2(_tile_size*_room_width*(-i+ceil(max_width)),_tile_size*_room_height*(-j+ceil(max_height))))
-	####################################
-	# DEBUG (print present room map)
-	for i in range(max_width):
-		var line = ""
-		for j in range(max_height):
-			if(rooms_present_map[i][j]):
-				line += "[X]"
-			else:
-				line += "[ ]"
-		print(line)
-	# END OF DEBUG
-	####################################
-	pass
+	for room in rooms_present:
+		var room_index
+		if room[0]==ceil(max_width/2) and room[1]==ceil(max_height/2):
+			room_index = 0
+		else:
+			room_index = randi()%(_room_types.size()-1)+1
+		var scene = _room_types[room_index].instance()
+		add_child(scene)
+		var x = _tile_size*_room_width*(room[0]-ceil(max_width/2))
+		var y = _tile_size*_room_height*(room[1]-ceil(max_height/2))
+		scene.global_translate(Vector2(x,y))
 
 
 func how_many_adjacent(rooms_present_map: Array, room : Array, sides := get_sides()):
