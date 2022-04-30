@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://world/Room.tscn" type="PackedScene" id=1]
+
+[node name="Node2D" instance=ExtResource( 1 )]
+left_door = true
+right_door = true
+up_door = true
+down_door = true
