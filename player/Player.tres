@@ -1,0 +1,89 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=27 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "LeftHookHold"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "LeftHookPost"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "LeftHookPre"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "LeftJab"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "RightHookHold"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "RightHookPost"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "RightHookPre"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "RightJab"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "Walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=14]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+
+[resource]
+states/Idle/node = SubResource( 2 )
+states/Idle/position = Vector2( 130, 114 )
+states/LeftHookHold/node = SubResource( 3 )
+states/LeftHookHold/position = Vector2( 130, -87 )
+states/LeftHookPost/node = SubResource( 4 )
+states/LeftHookPost/position = Vector2( -113, -6 )
+states/LeftHookPre/node = SubResource( 5 )
+states/LeftHookPre/position = Vector2( 130, -6 )
+states/LeftJab/node = SubResource( 6 )
+states/LeftJab/position = Vector2( 130, 228 )
+states/RightHookHold/node = SubResource( 7 )
+states/RightHookHold/position = Vector2( 339, -87 )
+states/RightHookPost/node = SubResource( 8 )
+states/RightHookPost/position = Vector2( 592, -6 )
+states/RightHookPre/node = SubResource( 9 )
+states/RightHookPre/position = Vector2( 339, -6 )
+states/RightJab/node = SubResource( 10 )
+states/RightJab/position = Vector2( 339, 228 )
+states/Walk/node = SubResource( 11 )
+states/Walk/position = Vector2( 339, 114 )
+transitions = [ "Idle", "Walk", SubResource( 12 ), "Idle", "LeftJab", SubResource( 13 ), "Walk", "LeftJab", SubResource( 14 ), "Idle", "RightJab", SubResource( 15 ), "Walk", "RightJab", SubResource( 16 ), "Idle", "LeftHookPre", SubResource( 17 ), "Walk", "RightHookPre", SubResource( 18 ), "LeftHookPre", "LeftHookHold", SubResource( 21 ), "LeftHookHold", "LeftHookPost", SubResource( 22 ), "RightHookPre", "RightHookHold", SubResource( 23 ), "RightHookHold", "RightHookPost", SubResource( 24 ), "RightHookPost", "Walk", SubResource( 25 ), "LeftHookPost", "Idle", SubResource( 26 ), "Walk", "Idle", SubResource( 27 ), "Idle", "RightHookPre", SubResource( 28 ), "Walk", "LeftHookPre", SubResource( 29 ) ]
+start_node = "Idle"
+end_node = "Idle"
+graph_offset = Vector2( -258, -237 )
