@@ -1,12 +1,11 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/kingaroo-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
-[ext_resource path="res://player/AnimationTreeController.gd" type="Script" id=3]
-[ext_resource path="res://player/Player.tres" type="AnimationNodeStateMachine" id=4]
+[ext_resource path="res://player/Player-2.tres" type="AnimationNodeStateMachine" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 15.0
+radius = 6.0
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=40]
 
@@ -182,10 +181,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.166667, 0.333333, 0.5, 0.666667, 0.833333, 1 ),
+"times": PoolRealArray( 0, 0.333333, 0.5, 0.501, 0.666667, 0.833333, 1 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 7, 8, 9, 10, 11, 12, 13 ]
+"values": [ 7, 9, 10, 8, 11, 12, 13 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("LeftFist:position")
@@ -249,6 +248,30 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( 7, -7 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("LeftFist:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("RightFist:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
 }
 
 [sub_resource type="Animation" id=33]
@@ -428,30 +451,60 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 36, 37, 38, 39, 40, 41, 42, 43, 44, 36 ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftFist:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -7, -8 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("RightFist:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 7, -8 ) ]
+}
 
 [sub_resource type="CircleShape2D" id=38]
 
 [sub_resource type="CircleShape2D" id=39]
 
 [node name="Player" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 2 )
+scale = Vector2( 1.75487, 2.835 )
 shape = SubResource( 1 )
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="PlayerItems" type="Node2D" parent="."]
+rotation = 1.5708
+
+[node name="Sprite" type="Sprite" parent="PlayerItems"]
 texture = ExtResource( 1 )
 hframes = 45
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = ExtResource( 4 )
+[node name="AnimationTree" type="AnimationTree" parent="PlayerItems"]
+tree_root = ExtResource( 3 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-process_mode = 0
 parameters/playback = SubResource( 40 )
-script = ExtResource( 3 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerItems"]
+playback_speed = 2.0
 anims/Idle = SubResource( 27 )
 anims/LeftHookHold = SubResource( 28 )
 anims/LeftHookPost = SubResource( 29 )
@@ -464,18 +517,30 @@ anims/RightHookPre = SubResource( 35 )
 anims/RightJab = SubResource( 36 )
 anims/Walk = SubResource( 37 )
 
-[node name="LeftFist" type="RigidBody2D" parent="."]
+[node name="LeftFist" type="RigidBody2D" parent="PlayerItems"]
 position = Vector2( -7, -7 )
+collision_layer = 2
+collision_mask = 2
+mode = 3
+gravity_scale = 0.0
+contacts_reported = 1
+can_sleep = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftFist"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerItems/LeftFist"]
 shape = SubResource( 38 )
 
-[node name="RightFist" type="RigidBody2D" parent="."]
+[node name="RightFist" type="RigidBody2D" parent="PlayerItems"]
 position = Vector2( 7, -7 )
+collision_layer = 4
+collision_mask = 4
+mode = 3
+gravity_scale = 0.0
+contacts_reported = 1
+can_sleep = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RightFist"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerItems/RightFist"]
 shape = SubResource( 39 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="PlayerItems"]
 current = true
-zoom = Vector2( 0.5, 0.5 )
+zoom = Vector2( 0.25, 0.25 )

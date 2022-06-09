@@ -1,11 +1,6 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
-[ext_resource path="res://player/Enemy.gd" type="Script" id=3]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 31 )
 
 [node name="Node2D" type="Node2D"]
 
@@ -16,16 +11,6 @@ margin_right = 206.0
 margin_bottom = 96.0
 color = Color( 0.188235, 0.380392, 0.188235, 1 )
 
-[node name="Enemy" type="RigidBody2D" parent="." groups=["Enemies"]]
-position = Vector2( -90, -43 )
-mode = 2
-gravity_scale = 0.0
-script = ExtResource( 3 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
-shape = SubResource( 1 )
-
-[node name="Sprite" type="Sprite" parent="Enemy"]
-texture = ExtResource( 2 )
-
 [node name="Player" parent="." instance=ExtResource( 1 )]
+collision_layer = 1
+collision_mask = 1

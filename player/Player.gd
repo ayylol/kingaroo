@@ -3,92 +3,77 @@ extends KinematicBody2D
 
 export var speed : float = 180.0
 export var knockBackForce : float = 100.0
+export var controllerDeadzoneY : float = 0.25
+export var controllerDeadzoneX : float = 0.25
 
 
 var velocity : Vector2 = Vector2()
-var doubleJump = false
 var time : float = 0
 var hookTime : float = 0.5
-var timeInHook : float = 0.25
-var isPunching : bool = false
+var timeInHook : float = 0.0
 var parent
 var animationTree
-var animationPlayer
 var stateMachine
 
 
 func _ready():
 	parent = get_parent()
-	animationTree = get_node("AnimationTree")
-	animationPlayer = get_node("AnimationPlayer")
+	animationTree = get_node("PlayerItems/AnimationTree")
 	stateMachine = animationTree["parameters/playback"]
 
 
 func _physics_process(delta):
 	velocity = Vector2.ZERO
-	isPunching = false
-	if Input.is_action_pressed("move_left"):
-		velocity.x -= 1
-	if Input.is_action_pressed("move_right"):
-		velocity.x += 1
-	if Input.is_action_pressed("move_up"):
-		velocity.y -= 1
-	if Input.is_action_pressed("move_down"):
-		velocity.y += 1
-	
+	velocity = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = velocity.normalized() * speed
 	velocity = move_and_slide(velocity, Vector2.ZERO, true)
-	
+	fighting_input(delta)
+
+
+func _input(event):
+	if event is InputEventJoypadMotion:
+		var direction : Vector2 = Input.get_vector("look_left", "look_right", "look_up", "look_down")
+		if abs(direction.x) > controllerDeadzoneX || abs(direction.y) > controllerDeadzoneY:
+			rotation_degrees = rad2deg(direction.angle())
+	elif event is InputEventMouseMotion:
+			look_at(get_global_mouse_position())
+
+
+func fighting_input(delta):
+	if velocity == Vector2.ZERO:
+		stateMachine.travel("Idle")
+	else:
+		stateMachine.travel("Walk")
 	if Input.is_action_pressed("left_punch"):
 		time += delta
-		isPunching = true
 		if timeInHook < time:
 			stateMachine.travel("LeftHookHold")
-			#$Sprite.play("hold left hook")
 		elif time > hookTime:
 			stateMachine.travel("LeftHookPre")
-			#$Sprite.play("pre left hook")
 			timeInHook = time
 	if Input.is_action_pressed("right_punch"):
 		time += delta
-		isPunching = true
 		if timeInHook < time:
 			stateMachine.travel("RightHookHold")
-			#$Sprite.play("hold right hook")
 		elif time > hookTime:
 			stateMachine.travel("RightHookPre")
-			#$Sprite.play("pre right hook")
 			timeInHook = time
 	if Input.is_action_just_released("left_punch"):
 		if time < hookTime:
 			stateMachine.travel("LeftJab")
-			#$Sprite.play("left punch")
 		else:
 			stateMachine.travel("Idle")
-			#$Sprite.play("post left hook")
 		time = 0
 	if Input.is_action_just_released("right_punch"):
 		if time < hookTime:
 			stateMachine.travel("RightJab")
-			#$Sprite.play("right punch")
 		else:
 			stateMachine.travel("Idle")
-			#$Sprite.play("post right hook")
 		time = 0
-#
-#	$Sprite.look_at(get_global_mouse_position())
-#	$Sprite.rotation_degrees += 90
-
-
-#func _on_Sprite_animation_finished():
-#	if $Sprite.animation == "left punch" || $Sprite.animation == "right punch" || $Sprite.animation == "post left hook" || $Sprite.animation == "post right hook":
-#		$Sprite.play("idle")
-#		time = 0
-#		if velocity != Vector2.ZERO && isPunching == false:
-#			$Sprite.play("walk")
 
 
 #func _on_PunchArea2d_body_entered(body):
 #	if body.is_in_group("Enemies"):
 #		print("punching")
 #		body.hit(position)
+
